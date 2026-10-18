@@ -1,0 +1,205 @@
+{
+  "generated_at": "2026-10-18T07:14:34+00:00",
+  "python": "3.15.0",
+  "platform": "Windows AMD64 (CPU)",
+  "numpy": "2.5.4",
+  "results": {
+    "canny-edge-numpy": {
+      "id": "canny-edge-numpy",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "duration": 1.42,
+      "cases": [
+        {
+          "name": "test_gaussian_kernel_sums_to_one_and_is_symmetric",
+          "status": "passed"
+        },
+        {
+          "name": "test_filter2d_identity_kernel_keeps_image",
+          "status": "passed"
+        },
+        {
+          "name": "test_edges_lie_on_square_border",
+          "status": "passed"
+        },
+        {
+          "name": "test_flat_image_has_no_edges",
+          "status": "passed"
+        },
+        {
+          "name": "test_edges_are_thin",
+          "status": "passed"
+        },
+        {
+          "name": "test_noise_robustness",
+          "status": "passed"
+        },
+        {
+          "name": "test_hysteresis_keeps_weak_pixel_connected_to_strong",
+          "status": "passed"
+        },
+        {
+          "name": "test_hysteresis_rejects_invalid_thresholds",
+          "status": "passed"
+        },
+        {
+          "name": "test_nms_thins_a_ramp",
+          "status": "passed"
+        }
+      ]
+    },
+    "fde-safe-db-assistant": {
+      "id": "fde-safe-db-assistant",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "duration": 1.37,
+      "cases": [
+        {
+          "name": "test_connection_is_read_only",
+          "status": "passed"
+        },
+        {
+          "name": "test_injection_attempt_cannot_change_data",
+          "status": "passed"
+        },
+        {
+          "name": "test_personal_data_is_masked",
+          "status": "passed"
+        },
+        {
+          "name": "test_unknown_question_is_refused_with_help",
+          "status": "passed"
+        },
+        {
+          "name": "test_parameters_are_validated",
+          "status": "passed"
+        },
+        {
+          "name": "test_every_question_is_audited",
+          "status": "passed"
+        },
+        {
+          "name": "test_turkish_normalization",
+          "status": "passed"
+        },
+        {
+          "name": "test_masks",
+          "status": "passed"
+        },
+        {
+          "name": "test_eval_set_accuracy",
+          "status": "passed"
+        }
+      ]
+    },
+    "harris-corner-numpy": {
+      "id": "harris-corner-numpy",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "duration": 1.2,
+      "cases": [
+        {
+          "name": "test_finds_four_corners_of_square",
+          "status": "passed"
+        },
+        {
+          "name": "test_flat_image_has_no_corners",
+          "status": "passed"
+        },
+        {
+          "name": "test_straight_edge_is_not_a_corner",
+          "status": "passed"
+        },
+        {
+          "name": "test_response_sign_matches_theory",
+          "status": "passed"
+        }
+      ]
+    },
+    "iou-dice-metrics": {
+      "id": "iou-dice-metrics",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "duration": 1.22,
+      "cases": [
+        {
+          "name": "test_box_iou_known_value",
+          "status": "passed"
+        },
+        {
+          "name": "test_box_iou_identical_and_disjoint",
+          "status": "passed"
+        },
+        {
+          "name": "test_box_iou_is_symmetric",
+          "status": "passed"
+        },
+        {
+          "name": "test_invalid_box_raises",
+          "status": "passed"
+        },
+        {
+          "name": "test_counts_and_page_example",
+          "status": "passed"
+        },
+        {
+          "name": "test_dice_iou_relationship",
+          "status": "passed"
+        },
+        {
+          "name": "test_empty_masks_policy",
+          "status": "passed"
+        },
+        {
+          "name": "test_shape_mismatch_raises",
+          "status": "passed"
+        }
+      ]
+    },
+    "transaction-anomaly-detection": {
+      "id": "transaction-anomaly-detection",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "duration": 2.15,
+      "cases": [
+        {
+          "name": "test_c_factor_matches_page_example",
+          "status": "passed"
+        },
+        {
+          "name": "test_robust_z_ignores_outlier_in_center_estimate",
+          "status": "passed"
+        },
+        {
+          "name": "test_isolation_forest_scores_outlier_higher",
+          "status": "passed"
+        },
+        {
+          "name": "test_isolation_forest_is_deterministic_with_seed",
+          "status": "passed"
+        },
+        {
+          "name": "test_average_precision_matches_page_example",
+          "status": "passed"
+        },
+        {
+          "name": "test_both_methods_beat_random_baseline_by_far",
+          "status": "passed"
+        },
+        {
+          "name": "test_cost_threshold_is_optimal_against_brute_force",
+          "status": "passed"
+        },
+        {
+          "name": "test_no_fit_raises",
+          "status": "passed"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# Tutorial scriptlerini küçük verilerle CPU'da çalıştırır. GPU gerektirenler (requires_gpu: true) atlanır.
+# Kullanıcı kodu burada ÇALIŞTIRILMAZ; yalnızca repodaki, incelenmiş tutorial kodları test edilir.
+name: script-tests
+on:
+  push:
+    paths: ['content/tutorials/**', 'scripts/run_tutorial_tests.py']
+  pull_request:
+    paths: ['content/tutorials/**']
+  schedule:
+    - cron: '17 4 * * 1'   # haftalık: bağımlılık güncellemeleri kodu bozdu mu?
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tutorials:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install "numpy>=1.24" "pytest>=8"
+      - run: python scripts/run_tutorial_tests.py --fail
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: script-report, path: content/_generated/script-report.json, retention-days: 30 }
+      - name: Özet
+        if: always()
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r = json.load(open('content/_generated/script-report.json'))
+          print('| Tutorial | Durum | Geçti | Başarısız |\n|---|---|---|---|')
+          for k, v in r['results'].items(): print(f"| {k} | {v['status']} | {v['passed']} | {v['failed']} |")
+          PY

@@ -1,0 +1,67 @@
+# Henüz içeriği yazılmamış ama kapsamda olan alanlar.
+# Bu liste Coverage Explorer'da "Planlandı" olarak görünür; içerik varmış gibi gösterilmez.
+# Bir alanın içeriğini yazdığınızda buradan silin ve content/ altına Markdown dosyasını ekleyin
+# (npm run content:new -- sector <id> "<başlık>").
+
+sectors:
+  - { id: logistics-transport, title: "Lojistik ve Ulaşım", title_en: "Logistics & Transport", group: "Operasyon" }
+  - { id: education, title: "Eğitim ve Eğitim Teknolojileri", title_en: "Education & EdTech", group: "Toplum" }
+  - { id: law-regulation, title: "Hukuk, Hukuk Teknolojileri ve Regülasyon", title_en: "Law, LegalTech & Regulation", group: "Toplum" }
+  - { id: economics-business, title: "Ekonomi ve İşletme", title_en: "Economics & Business", group: "İş" }
+  - { id: product-startups, title: "Ürün Geliştirme ve Girişimcilik", title_en: "Product & Entrepreneurship", group: "İş" }
+  - { id: scientific-research, title: "Araştırma ve Bilimsel Yöntemler", title_en: "Research & Scientific Method", group: "Bilim" }
+  - { id: hardware-embedded, title: "Donanım, Gömülü Sistemler ve Elektronik", title_en: "Hardware, Embedded & Electronics", group: "Mühendislik" }
+  - { id: hci-accessibility, title: "İnsan-Bilgisayar Etkileşimi ve Erişilebilirlik", title_en: "HCI & Accessibility", group: "Mühendislik" }
+  - { id: space-remote-sensing, title: "Uzay, Uydu Sistemleri ve Uzaktan Algılama", title_en: "Space, Satellites & Remote Sensing", group: "Bilim" }
+  - { id: media-gaming, title: "Medya, Oyun ve Reklamcılık", title_en: "Media, Gaming & Advertising", group: "Dijital" }
+  - { id: human-resources, title: "İnsan Kaynakları", title_en: "Human Resources", group: "İş" }
+  - { id: public-services, title: "Kamu Hizmetleri", title_en: "Public Services", group: "Toplum" }
+  - { id: construction-architecture, title: "İnşaat ve Mimarlık", title_en: "Construction & Architecture", group: "Mühendislik" }
+  - { id: geology-earth, title: "Jeoloji ve Yer Bilimleri", title_en: "Geology & Earth Sciences", group: "Bilim" }
+  - { id: livestock, title: "Hayvancılık", title_en: "Livestock", group: "Doğa" }
+
+careers:
+  - { id: research-engineer, title: "Research Engineer", group: "AI & Araştırma" }
+  - { id: research-scientist, title: "Research Scientist", group: "AI & Araştırma" }
+  - { id: applied-scientist, title: "Applied Scientist", group: "AI & Araştırma" }
+  - { id: data-scientist, title: "Data Scientist", group: "Veri" }
+  - { id: analytics-engineer, title: "Analytics Engineer", group: "Veri" }
+  - { id: bi-engineer, title: "Business Intelligence Engineer", group: "Veri" }
+  - { id: software-engineer, title: "Software Engineer", group: "Yazılım" }
+  - { id: backend-engineer, title: "Backend Engineer", group: "Yazılım" }
+  - { id: frontend-engineer, title: "Frontend Engineer", group: "Yazılım" }
+  - { id: fullstack-engineer, title: "Full-Stack Engineer", group: "Yazılım" }
+  - { id: platform-engineer, title: "Platform Engineer", group: "Altyapı" }
+  - { id: infrastructure-engineer, title: "Infrastructure Engineer", group: "Altyapı" }
+  - { id: devops-engineer, title: "DevOps Engineer", group: "Altyapı" }
+  - { id: llm-engineer, title: "LLM Engineer", group: "AI & Araştırma" }
+  - { id: ai-agent-engineer, title: "AI Agent Engineer", group: "AI & Araştırma" }
+  - { id: robotics-engineer, title: "Robotics Engineer", group: "Fiziksel sistemler" }
+  - { id: embedded-engineer, title: "Embedded Systems Engineer", group: "Fiziksel sistemler" }
+  - { id: edge-ai-engineer, title: "Edge AI Engineer", group: "Fiziksel sistemler" }
+  - { id: data-quality-engineer, title: "Data Quality Engineer", group: "Veri" }
+  - { id: data-operations-specialist, title: "Data Annotation / Data Operations Specialist", group: "Veri" }
+  - { id: ai-evaluation-engineer, title: "AI Evaluation Engineer", group: "AI & Araştırma" }
+  - { id: network-engineer, title: "Network Engineer", group: "Altyapı" }
+  - { id: wireless-engineer, title: "Wireless Communications Engineer", group: "Fiziksel sistemler" }
+  - { id: cloud-engineer, title: "Cloud Engineer", group: "Altyapı" }
+  - { id: database-engineer, title: "Database Engineer", group: "Veri" }
+  - { id: solutions-architect, title: "Solutions Architect", group: "Müşteri & Ürün" }
+  - { id: solutions-engineer, title: "Solutions Engineer", group: "Müşteri & Ürün" }
+  - { id: sales-engineer, title: "Sales Engineer", group: "Müşteri & Ürün" }
+  - { id: technical-product-manager, title: "Technical Product Manager", group: "Müşteri & Ürün" }
+  - { id: product-engineer, title: "Product Engineer", group: "Müşteri & Ürün" }
+  - { id: qa-engineer, title: "QA Engineer", group: "Kalite & Güvenlik" }
+  - { id: test-automation-engineer, title: "Test Automation Engineer", group: "Kalite & Güvenlik" }
+  - { id: privacy-engineer, title: "Privacy Engineer", group: "Kalite & Güvenlik" }
+  - { id: safety-engineer, title: "Safety Engineer", group: "Kalite & Güvenlik" }
+  - { id: reliability-engineer, title: "Reliability Engineer", group: "Kalite & Güvenlik" }
+  - { id: hardware-engineer, title: "Hardware Engineer", group: "Fiziksel sistemler" }
+  - { id: fpga-engineer, title: "FPGA Engineer", group: "Fiziksel sistemler" }
+  - { id: firmware-engineer, title: "Firmware Engineer", group: "Fiziksel sistemler" }
+  - { id: research-operations-engineer, title: "Research Operations Engineer", group: "AI & Araştırma" }
+  - { id: technical-program-manager, title: "Technical Program Manager", group: "Müşteri & Ürün" }
+  - { id: technical-support-engineer, title: "Technical Support Engineer", group: "Müşteri & Ürün" }
+  - { id: devrel-engineer, title: "Developer Relations Engineer", group: "Müşteri & Ürün" }
+  - { id: clinical-data-engineer, title: "Clinical Data Engineer", group: "Veri" }
+  - { id: actuary, title: "Aktüer", title_en: "Actuary", group: "Finans" }

@@ -1,0 +1,15 @@
+node_modules/
+apps/web/dist/
+apps/web/public/content/
+apps/api/data/
+apps/api/.venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+content/_generated/junit-*.xml
+tests/e2e/out/
+*.tsbuildinfo
+link-report.json
+content-report.json

@@ -1,0 +1,36 @@
+# Web uygulamasını (Online + Offline PWA) GitHub Pages'a yayımlar. Ücretsizdir; sunucu gerektirmez.
+# Repo adresi ve commit derlemeye gömülür, böylece kod bağlantıları doğrudan dosya ve satıra gider.
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install "numpy>=1.24" "pytest>=8" && python scripts/run_tutorial_tests.py
+      - run: npm ci && npm run build
+        env: { ACADEMY_REPO_URL: "${{ github.server_url }}/${{ github.repository }}", ACADEMY_REPO_REF: "${{ github.sha }}" }
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: apps/web/dist }
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: "${{ steps.d.outputs.page_url }}" }
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4

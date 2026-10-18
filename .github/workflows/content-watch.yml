@@ -1,0 +1,43 @@
+# Haftalık içerik bakımı: kaynak URL erişilebilirliği, doğrulama raporu ve güncelliği geçmiş içerik.
+# HİÇBİR içeriği otomatik değiştirmez veya yayımlamaz; yalnızca rapor üretir ve bir issue açar/günceller.
+name: content-watch
+on:
+  schedule:
+    - cron: '41 5 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: node scripts/check-links.mjs link-report.json
+      - run: node scripts/validate-content.mjs --json content-report.json || true
+      - name: Rapor
+        id: r
+        run: |
+          node -e '
+            const l=require("./link-report.json"), c=require("./content-report.json");
+            const lines=["## İçerik bakım raporu", "", `Kaynak URL: ${l.total}, sorunlu: ${l.broken}`, ""];
+            for (const b of l.results.filter(r=>!r.ok)) lines.push(`- [ ] ${b.status||b.error} ${b.url} (${b.usedBy.join(", ")})`);
+            lines.push("", `Doğrulama hataları: ${c.errors.length}, uyarılar: ${c.warnings.length}`);
+            for (const e of c.errors) lines.push(`- ✗ ${e}`);
+            require("fs").writeFileSync("report.md", lines.join("\n"));
+            require("fs").appendFileSync(process.env.GITHUB_OUTPUT, `problems=${l.broken + c.errors.length}\n`);
+          '
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with: { name: content-watch, path: "*-report.json", retention-days: 30 }
+      - name: Issue aç / güncelle
+        if: steps.r.outputs.problems != '0'
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          n=$(gh issue list --label content-watch --state open --json number -q '.[0].number')
+          if [ -n "$n" ]; then gh issue comment "$n" --body-file report.md
+          else gh label create content-watch --force >/dev/null; gh issue create --title "İçerik bakım raporu" --label content-watch --body-file report.md; fi

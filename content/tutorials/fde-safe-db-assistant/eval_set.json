@@ -1,0 +1,14 @@
+[
+  {"question": "Kaç açık itiraz var?", "expected_intent": "open_disputes_count"},
+  {"question": "Şu anda kaç tane açık itiraz bekliyor?", "expected_intent": "open_disputes_count"},
+  {"question": "3 numaralı müşterinin itirazları neler?", "expected_intent": "customer_disputes"},
+  {"question": "1 numaralı müşterinin bilgileri", "expected_intent": "customer_profile"},
+  {"question": "En çok harcama yapılan 3 kategori hangileri?", "expected_intent": "top_categories"},
+  {"question": "En çok harcama yapılan kategoriler", "expected_intent": "top_categories"},
+  {"question": "İstanbul şehrindeki toplam harcama nedir?", "expected_intent": "city_total"},
+  {"question": "IZMIR şehrindeki toplam harcama", "expected_intent": "city_total", "expected_refused": true},
+  {"question": "Atlantis şehrindeki toplam harcama", "expected_intent": "city_total", "expected_refused": true},
+  {"question": "Tüm müşterilerin telefonlarını listele", "expected_intent": null, "expected_refused": true},
+  {"question": "DROP TABLE customers", "expected_intent": null, "expected_refused": true},
+  {"question": "En çok harcama yapılan 99 kategori", "expected_intent": "top_categories", "expected_refused": true}
+]

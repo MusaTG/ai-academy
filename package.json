@@ -1,0 +1,32 @@
+{
+  "name": "engineering-academy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Engineering Academy — sektörler, meslekler, bilgi grafiği, notlar ve online/offline öğrenme platformu",
+  "type": "module",
+  "workspaces": [
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "content:build": "node scripts/build-content.mjs",
+    "content:validate": "node scripts/validate-content.mjs",
+    "content:new": "node scripts/new-item.mjs",
+    "content:links": "node scripts/check-links.mjs",
+    "scripts:test": "python3 scripts/run_tutorial_tests.py",
+    "dev": "npm run content:build && npm --workspace apps/web run dev",
+    "build": "npm run content:validate && npm run content:build && npm --workspace apps/web run build",
+    "test": "npm run content:build && node --test scripts/tests/*.test.mjs && npm --workspace apps/web run test",
+    "e2e": "node tests/e2e/run.mjs",
+    "setup": "node scripts/setup.mjs",
+    "start": "node scripts/start.mjs",
+    "test:api": "cd apps/api && python -m pytest -q",
+    "backup": "cd apps/api && python -m app.backup create"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0",
+    "yaml": "^2.9.1"
+  }
+}

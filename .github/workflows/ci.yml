@@ -1,0 +1,65 @@
+# Kod kalitesi: içerik doğrulama, tip kontrolü, birim testleri, derleme, API testleri,
+# bağımlılık taraması ve 10 kabul senaryosunun uçtan uca testi.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: İçerik doğrulama (kırık bağlantı, şema, formül, döngü, mükerrer)
+        run: npm run content:validate -- --json content-report.json
+      - name: İçerik hattı testleri
+        run: node --test scripts/tests/*.test.mjs
+      - name: Tip kontrolü + birim testleri
+        run: npm run content:build && npm --workspace apps/web run typecheck && npm --workspace apps/web run test
+      - name: Derleme
+        run: npm run build
+      - name: Bağımlılık taraması (yalnızca üretim bağımlılıkları)
+        run: npm audit --omit=dev --audit-level=high
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: content-report, path: content-report.json, retention-days: 14 }
+
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12', cache: pip, cache-dependency-path: apps/api/requirements*.txt }
+      - run: pip install -r apps/api/requirements-dev.txt pip-audit
+      - run: cd apps/api && python -m pytest -q
+      - name: Bağımlılık taraması
+        run: pip-audit -r apps/api/requirements.txt
+
+  e2e:
+    needs: [web, api]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12', cache: pip, cache-dependency-path: apps/api/requirements*.txt }
+      - run: npm ci && npx playwright install --with-deps chromium
+      - run: pip install -r apps/api/requirements.txt numpy pytest
+      - run: python scripts/run_tutorial_tests.py
+      - run: npm run build
+        env: { ACADEMY_REPO_URL: "${{ github.server_url }}/${{ github.repository }}", ACADEMY_REPO_REF: "${{ github.sha }}" }
+      - name: 10 kabul senaryosu
+        run: node tests/e2e/run.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: e2e-report, path: tests/e2e/out/, retention-days: 14 }

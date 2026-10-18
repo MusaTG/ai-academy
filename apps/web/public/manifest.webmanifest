@@ -1,0 +1,12 @@
+{
+  "name": "Engineering Academy",
+  "short_name": "Academy",
+  "description": "Sektörler, meslekler, bilgi grafiği ve notlar — çevrimdışı da çalışır.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#1d2b3a",
+  "lang": "tr",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
