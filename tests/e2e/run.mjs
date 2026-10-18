@@ -68,10 +68,25 @@ async function device(name) {
 const go = async (page, hash) => { await page.goto(BASE + '#' + hash); await page.waitForLoadState('networkidle').catch(() => {}); };
 const pending = (page) => page.locator('[data-testid=pending-count]').innerText();
 
+// Buton, eşitleme durumu değiştikçe yeniden çizilebilir: etkinleşmesini bekleyip kısa denemelerle tıkla
+async function clickSync(page) {
+  const btn = page.locator('[data-testid=sync-now]');
+  await waitFor(async () => await btn.isEnabled(), 15000, 'Şimdi eşitle düğmesi etkinleşmedi');
+  for (let i = 0; ; i++) {
+    try { await btn.click({ timeout: 3000 }); return; } catch (e) {
+      if (i >= 5) {
+        fs.mkdirSync(path.join(ROOT, 'tests/e2e/out'), { recursive: true });
+        await page.screenshot({ path: path.join(ROOT, 'tests/e2e/out', `sync-fail-${Date.now()}.png`), fullPage: true }).catch(() => {});
+        throw new Error(`${e.message.split('\n')[0]} (URL: ${page.url()})`);
+      }
+    }
+  }
+}
+
 async function syncAndSettle(page) {
   await go(page, '/offline');
   const before = await page.locator('[data-testid=last-sync]').getAttribute('data-value');
-  await page.click('[data-testid=sync-now]');
+  await clickSync(page);
   await waitFor(async () => (await page.locator('[data-testid=last-sync]').getAttribute('data-value')) !== before, 15000, 'eşitleme turu bitmedi');
   await waitFor(async () => (await page.locator('[data-testid=sync-status]').innerText()) === 'idle' && (await pending(page)) === '0', 15000, 'eşitleme tamamlanmadı');
 }
@@ -134,6 +149,7 @@ async function main() {
     await p.waitForSelector('[data-testid=note-body]');
     await p.fill('[data-testid=note-title]', 'IoU deney notlarım');
     await p.fill('[data-testid=note-body]', 'Kaynak: [[iou-dice-metrics|IoU ve Dice]]\n\nKüçük nesnelerde [[Object Detection]] için IoU eşiği kritik. Focal loss da denenebilir.\n\n[[Henüz yazılmamış bir not]]');
+    await p.waitForURL((u) => /#\/notes\/n-/.test(u.href), { timeout: 15000 });
     await p.waitForTimeout(1200);
     noteId = decodeURIComponent(p.url().split('/notes/')[1]);
     assert(noteId && noteId.startsWith('n-'), 'not kimliği yok');
@@ -149,8 +165,9 @@ async function main() {
     // Boş bağlantı → yeni not oluşturulabilir
     await go(p, `/notes/${noteId}`);
     await p.locator('.preview a.wikilink.missing').click();
-    await p.waitForSelector('[data-testid=note-title]');
-    assert((await p.inputValue('[data-testid=note-title]')) === 'Henüz yazılmamış bir not', 'boş bağlantıdan not oluşmadı');
+    // Yeni notun gerçekten açılmasını bekle (yavaş CI makinelerinde eski editör bir süre ekranda kalır)
+    await p.waitForURL((u) => /#\/notes\/n-/.test(u.href) && !u.href.includes(noteId), { timeout: 15000 });
+    await waitFor(async () => (await p.inputValue('[data-testid=note-title]')) === 'Henüz yazılmamış bir not', 10000, 'boş bağlantıdan not oluşmadı');
   });
 
   await scenario('ön adım', 'Hesap oluştur', async () => {
@@ -216,7 +233,7 @@ async function main() {
     await syncAndSettle(pb);
     await A.ctx.setOffline(false);
     await go(pa, '/offline');
-    await pa.click('[data-testid=sync-now]');
+    await clickSync(pa);
     await pa.locator('[data-testid=conflict]').waitFor({ timeout: 15000 });
     const txt = await pa.locator('[data-testid=conflict]').innerText();
     assert(txt.includes('A CİHAZI') && txt.includes('B CİHAZI'), 'çakışmada iki sürüm de gösterilmeli');
@@ -234,6 +251,9 @@ async function main() {
     await go(pb, `/notes/${extraId}`);
     pb.once('dialog', (d) => d.accept());
     await pb.getByRole('button', { name: 'Sil' }).click();
+    // Silme bitince uygulama not listesine döner; bunu bekle, yoksa geç gelen yönlendirme sonraki adımı bozar
+    await pb.waitForURL((u) => u.href.endsWith('#/notes'), { timeout: 10000 });
+    await waitFor(async () => (await pb.locator('[data-testid=note-list]').getByText('Henüz yazılmamış bir not').count()) === 0, 10000, 'silinen not listede kaldı');
     await syncAndSettle(pb);
     await syncAndSettle(pa);
     await go(pa, '/notes');
