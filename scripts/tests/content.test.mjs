@@ -64,7 +64,10 @@ test('content:new şablonu taslak üretir ve taslak "stub" sayılır', () => {
 });
 
 test('planlanmış alanlar dizinde dolu gibi görünmez', () => {
-  const idx = JSON.parse(fs.readFileSync(path.join(ROOT, 'apps/web/public/content/index.json'), 'utf8'));
+  // Derlenmiş dosyaya güvenmeden kendi geçici derlemesini yapar (CI'da testler derlemeden önce çalışır)
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'academy-content-'));
+  run(['scripts/build-content.mjs'], { CONTENT_OUT: out });
+  const idx = JSON.parse(fs.readFileSync(path.join(out, 'index.json'), 'utf8'));
   const plannedIds = [...idx.catalog.sectors, ...idx.catalog.careers].map((c) => c.id);
   assert.ok(plannedIds.length > 0);
   for (const id of plannedIds) assert.ok(!idx.items.some((i) => i.id === id), `${id} hem planlı hem içerik`);
